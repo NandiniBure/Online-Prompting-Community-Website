@@ -6,15 +6,25 @@ import { useSession } from 'next-auth/react'
 import { usePathname,useRouter } from 'next/navigation'
 
 const PromptCart = (post,handleTagClick,handleEdit,handleDelete) => {
-
-
+  const{data:session}=useSession();
+const pathname=usePathname()
+const router=useRouter()
   const handlecopy=()=>{
     setcopied(post.post.prompt);
     navigator.clipboard.writeText(post.post.prompt);
     setTimeout(()=>setcopied(""),3000)
   }
+console.log(post.handleTagClick)
 
-  console.log({post})
+  const handleProfileClick = () => {
+    console.log(post);
+
+    if (post.post.creator._id === session?.user.id) return router.push("/profile");
+
+    router.push(`/profile/${post.post.creator._id}?name=${post.post.creator.username}`);
+  };
+
+
   const [copied,setcopied]=useState('')
   return (
 
@@ -22,7 +32,9 @@ const PromptCart = (post,handleTagClick,handleEdit,handleDelete) => {
       <div className='flex justify-between
       items-start gap-5'>
         <div className='flex-1 flex justify-start
-        items-center gap-3 cursor-pointer'>
+        items-center gap-3 cursor-pointer'
+        onClick={handleProfileClick}>
+      
           <Image
             src={post.post.creator.image}
             alt='user_image'
@@ -30,7 +42,7 @@ const PromptCart = (post,handleTagClick,handleEdit,handleDelete) => {
             height={40}
             className='rounded-full object-contain'
           />
-
+          
         <div className='flex flex-col '>
           <h3 className='font-satoshi font-semibold 
           text-gray-900 '>{post.post.creator.username}</h3>
@@ -50,7 +62,25 @@ const PromptCart = (post,handleTagClick,handleEdit,handleDelete) => {
  <p className='my-4 font-satoshi text-sm text-gray-700'>{post.post.prompt}</p>    
  <p className='font-inter text-sm blue_gradient
  cursor-pointer'
- onClick={()=>{handleTagClick && handleTagClick(post.post.tag)}}>{post.post.tag}</p> 
+ onClick={()=>{post.PromptCarthandleTagClick && post.handleTagClick(post.post.tag)}}>{post.post.tag}</p> 
+{
+  session?.user.id === post.post.creator._id && 
+  pathname === '/profile' && (
+    <div className='mt-5 flex-center gap-4 border-t 
+    border-gray-100 pt-3'>
+     {post.handleEdit && <p className='font-inter text-sm green_gradient cursor-pointer'
+      onClick={post.handleEdit}
+      >
+        Edit
+      </p>}
+      <p className='font-inter text-sm orange_gradient cursor-pointer'
+      onClick={post.handleDelete}>
+        Delete
+      </p>
+    </div>
+  )
+}
+
     </div>
   )
 }

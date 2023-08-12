@@ -1,8 +1,8 @@
 import React from 'react'
 import PromptCart from './PromptCart'
 const Profile = ({name,desc,data,handleEdit,handleDelete}) => {
+console.log("rfbdkm",handleEdit)
 console.log({data})
-
   return (
     <section className='w-full'>
       <h1 className='head_text text-left'>
@@ -16,8 +16,8 @@ console.log({data})
             <PromptCart
               key={post._id}
               post={post}
-              handleEdit={()=>handleEdit && handleEdit(post)}
-              handleDelete={()=>handleDelete && handleDelete(post)}
+              handleEdit={()=> handleEdit(post)}
+              handleDelete={()=>handleDelete(post)}
             />
           ))
         }
