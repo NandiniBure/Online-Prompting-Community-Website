@@ -16,7 +16,7 @@ const handler=NextAuth({
       session.user.id =sessionUser._id.toString();
      return session
     },
-    async signIn ({profile}){
+    async signIn ({account, profile, user, credentials}){
          try{
           await connectToDB();
           const userExists=await User.findOne({

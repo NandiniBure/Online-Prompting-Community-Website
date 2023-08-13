@@ -99,7 +99,7 @@ Create Post
  onClick={()=>setroggleDropdown(false)}>
 My Profile
  </Link>
- <Link href="/profile"
+ <Link href='/create-prompt'
  className='dropdown_like'
  onClick={()=>setroggleDropdown(false)}>
 Create Prompt
