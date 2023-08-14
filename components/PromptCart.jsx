@@ -5,23 +5,24 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { usePathname,useRouter } from 'next/navigation'
 
-const PromptCart = (post,handleTagClick,handleEdit,handleDelete) => {
+const PromptCart = ({post,handleTagClick,handleEdit,handleDelete}) => {
   const{data:session}=useSession();
+ console.log({post})
 const pathname=usePathname()
 const router=useRouter()
   const handlecopy=()=>{
-    setcopied(post.post.prompt);
-    navigator.clipboard.writeText(post.post.prompt);
+    setcopied(post.prompt);
+    navigator.clipboard.writeText(post.prompt);
     setTimeout(()=>setcopied(""),3000)
   }
-console.log(post.handleTagClick)
+console.log(handleTagClick)
 
   const handleProfileClick = () => {
     console.log(post);
 
-    if (post.post.creator._id === session?.user.id) return router.push("/profile");
+    if (post?.creator?._id === session?.user.id) return router.push("/profile");
 
-    router.push(`/profile/${post.post.creator._id}?name=${post.post.creator.username}`);
+    router.push(`/profile/${post?.creator?._id}?name=${post?.creator?.username}`);
   };
 
 
@@ -36,7 +37,7 @@ console.log(post.handleTagClick)
         onClick={handleProfileClick}>
       
           <Image
-            src={post.post.creator.image}
+            src={post?.creator?.image}
             alt='user_image'
             width={40}
             height={40}
@@ -45,13 +46,13 @@ console.log(post.handleTagClick)
           
         <div className='flex flex-col '>
           <h3 className='font-satoshi font-semibold 
-          text-gray-900 '>{post.post.creator.username}</h3>
-          <p className='font-inter text-sm text-gray-500'>{post.post.creator.email}</p>
+          text-gray-900 '>{post?.creator?.username}</h3>
+          <p className='font-inter text-sm text-gray-500'>{post?.creator?.email}</p>
         </div>
         </div>
 <div className='copy_btn' onClick={handlecopy}>
   <Image
-    src={copied===post.post.prompt 
+    src={copied===post?.prompt 
     ? '/assets/icons/tick.svg'
     :'/assets/icons/copy.svg'}
     width={12}
@@ -59,22 +60,22 @@ console.log(post.handleTagClick)
   />
 </div>
 </div>
- <p className='my-4 font-satoshi text-sm text-gray-700'>{post.post.prompt}</p>    
+ <p className='my-4 font-satoshi text-sm text-gray-700'>{post.prompt}</p>    
  <p className='font-inter text-sm blue_gradient
  cursor-pointer'
- onClick={()=>{post.PromptCarthandleTagClick && post.handleTagClick(post.post.tag)}}>{post.post.tag}</p> 
+ onClick={()=>{PromptCarthandleTagClick && handleTagClick(post.tag)}}>{post.tag}</p> 
 {
-  session?.user.id === post.post.creator._id && 
+  session?.user.id === post?.creator?._id && 
   pathname === '/profile' && (
     <div className='mt-5 flex-center gap-4 border-t 
     border-gray-100 pt-3'>
-     {post.handleEdit && <p className='font-inter text-sm green_gradient cursor-pointer'
-      onClick={post.handleEdit}
+      <p className='font-inter text-sm green_gradient cursor-pointer'
+      onClick={handleEdit}
       >
         Edit
-      </p>}
+      </p>
       <p className='font-inter text-sm orange_gradient cursor-pointer'
-      onClick={post.handleDelete}>
+      onClick={handleDelete}>
         Delete
       </p>
     </div>
